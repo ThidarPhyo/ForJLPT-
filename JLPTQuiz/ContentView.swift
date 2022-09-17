@@ -9,8 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("Welcom to the quiz game")
+                NavigationLink {
+                    Quiz1()
+                } label: {
+                    Text("Start Quiz")
+                }
+
+            }
+            .navigationBarTitle("JLPT Quiz example",displayMode: .inline)
+        }
     }
 }
 
