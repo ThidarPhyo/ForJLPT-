@@ -16,6 +16,12 @@ struct Quiz1 : View {
     //var for the score
     @State var score = 0
     @State private var showActionSheet = false
+    
+    @Environment(\.managedObjectContext) var moc
+    @Environment(\.dismiss) var dismiss
+    @State private var showingDeleteAlert = false
+    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
      
     var body: some View {
         VStack(alignment: .leading,spacing: 15){
@@ -137,7 +143,7 @@ struct Quiz1 : View {
 //                FinalView(score : self.score)
 //            }
             ScrollView(.vertical,showsIndicators: false){
-                VStack(spacing: 20){
+                VStack(spacing: 32){
                     ForEach(myQuiz1.indices,id:\.self) { index in
 //                        Image(myQuiz1[self.i].img!)
 //                            .resizable()
@@ -180,15 +186,43 @@ struct Quiz1 : View {
                     .onDisappear(){
                         //SaveScore(quiz: "myQuiz1", score: self.score)
                         //ActionSheet(title: Text("Hello"))
+                        
                     }
                     .navigationBarTitle("JLPT Exam")
-                    
-                    
+                    .alert("Do you want to leave this page without see the answers?", isPresented: $showingDeleteAlert) {
+                        Button("Yes", role: .destructive, action: dismissView)
+                        Button("Cancel", role: .cancel) { }
+                    } message: {
+                        Text("Are you sure?")
+                    }
+                    .navigationBarBackButtonHidden(true)
+                            // Add your custom back button here
+                            .navigationBarItems(leading:
+                                Button(action: {
+                                showingDeleteAlert = true
+                                    //self.presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    HStack {
+                                        Image(systemName: "arrow.left.circle")
+                                        Text("Go Back")
+                                    }
+                            })
+//                    .toolbar {
+//
+//                        Button {
+//                            showingDeleteAlert = true
+//                        } label: {
+//                            Label("Delete this book", systemImage: "trash")
+//                        }
+//                    }
                 }
             }
              
         }
         .padding(.horizontal)
+    }
+    func dismissView() {
+        dismiss()
     }
 
 }
