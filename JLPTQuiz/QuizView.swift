@@ -22,126 +22,11 @@ struct Quiz1 : View {
     @State private var showingDeleteAlert = false
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State var selected = ""
+    @State var show = false
      
     var body: some View {
         VStack(alignment: .leading,spacing: 15){
-             
-            //if i < of questions --> play question
-//            if(self.i < myQuiz1.count){
-//
-//
-//                //image of the question
-//                Image(myQuiz1[self.i].img!)
-//                    .resizable()
-//                    .scaledToFit()
-//                    .padding(.horizontal)
-//
-//                //text of the question
-//                Text(myQuiz1[self.i].text!)
-//
-//
-//                //answer 0
-//                Button(action:{
-//                    self.showActionSheet = true
-//                    self.buttonAction(n: 0)
-//                },label: {
-//                    Text(myQuiz1[self.i].answer[0])
-//                        .foregroundColor(.black)
-//                        .padding()
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .stroke(Color.blue,lineWidth: 2)
-//                        )
-//                })
-//                .actionSheet(isPresented: $showActionSheet) {
-//                    ActionSheet(
-//                        title: Text("Score"),
-//                        message: Text("Score : \(self.score) / \(myQuiz1.count)"),
-//                        buttons: [
-//                            .cancel { print(self.showActionSheet) }
-//                        ]
-//                    )
-//                }
-//
-//                //answer 1
-//                Button(action:{
-//                    self.buttonAction(n: 1)
-//                    self.showActionSheet = true
-//                },label: {
-//                    Text(myQuiz1[self.i].answer[1])
-//                        .foregroundColor(.black)
-//                        .padding()
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .stroke(Color.blue,lineWidth: 2)
-//                        )
-//                })
-//                .actionSheet(isPresented: $showActionSheet) {
-//                    ActionSheet(
-//                        title: Text("Score"),
-//                        message: Text("Score : \(self.score) / \(myQuiz1.count)"),
-//                        buttons: [
-//                            .cancel { print(self.showActionSheet) }
-//                        ]
-//                    )
-//                }
-//
-//                //answer 2
-//                Button(action:{
-//                    self.buttonAction(n: 2)
-//                    self.showActionSheet = true
-//                },label: {
-//                    Text(myQuiz1[self.i].answer[2])
-//                        .foregroundColor(.black)
-//                        .padding()
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .stroke(Color.blue,lineWidth: 2)
-//                        )
-//                })
-//                .actionSheet(isPresented: $showActionSheet) {
-//                    ActionSheet(
-//                        title: Text("Score"),
-//                        message: Text("Score : \(self.score) / \(myQuiz1.count)"),
-//                        buttons: [
-//                            .cancel { print(self.showActionSheet) }
-//                        ]
-//                    )
-//                }
-//
-//                //answer 3
-//                Button(action:{
-//                    self.buttonAction(n: 3)
-//                    self.showActionSheet = true
-//                },label: {
-//                    Text(myQuiz1[self.i].answer[3])
-//                        .foregroundColor(.black)
-//                        .padding()
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .stroke(Color.blue,lineWidth: 2)
-//                        )
-//                })
-//                .actionSheet(isPresented: $showActionSheet) {
-//                    ActionSheet(
-//                        title: Text("Score"),
-//                        message: Text("Score : \(self.score) / \(myQuiz1.count)"),
-//                        buttons: [
-//                            .cancel { print(self.showActionSheet) }
-//                        ]
-//                    )
-//                }
-//
-//            }
-//
-//            //after last question --> show final view with score
-//            else{
-//                FinalView(score : self.score)
-//            }
             ScrollView(.vertical,showsIndicators: false){
                 VStack(spacing: 32){
                     ForEach(myQuiz1.indices,id:\.self) { index in
@@ -152,26 +37,41 @@ struct Quiz1 : View {
 
                         //text of the question
                         Text("(\(index+1)) \(myQuiz1[index].text!)")
+                        
                         ForEach(myQuiz1[index].answer.indices,id:\.self){ ansIndex in
                             Button(action:{
                                 //self.buttonAction(n: 3)
-//                                print(myQuiz1[index].correct)
-//                                print(ansIndex)
+                                print(index)
+                                print(myQuiz1[index].answer[ansIndex])
+                                print(ansIndex)
                                 if ansIndex == myQuiz1[index].correct {
                                     self.score = score + 1
                                 }
                                 self.showActionSheet = true
+                                //self.selected = "\(ansIndex)"
+                                self.selected = "\(myQuiz1[index].answer[ansIndex])"
                             },label: {
-                                Text(myQuiz1[index].answer[ansIndex])
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .stroke(Color.blue,lineWidth: 2)
-                                    )
+                                HStack {
+                                    Text(myQuiz1[index].answer[ansIndex])
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(Color.blue,lineWidth: 2)
+                                        )
+                                    Spacer()
+                                    ZStack {
+                                        Circle().fill(self.selected == "\(myQuiz1[index].answer[ansIndex])" ? Color.purple : Color.black.opacity(0.2)).frame(width: 18, height: 18)
+                                        if self.selected == "\(ansIndex)" {
+                                            Circle().stroke(Color.yellow,lineWidth: 4).frame(width: 25, height: 25)
+                                        }
+                                    }
+                                }.foregroundColor(.black)
+                                
                             })
                         }
+                        
                         
                         .actionSheet(isPresented: $showActionSheet) {
                             ActionSheet(
@@ -182,6 +82,7 @@ struct Quiz1 : View {
                                 ]
                             )
                         }
+                        
                     }
                     .onDisappear(){
                         //SaveScore(quiz: "myQuiz1", score: self.score)
@@ -220,6 +121,15 @@ struct Quiz1 : View {
              
         }
         .padding(.horizontal)
+        Button(action: {
+            
+        }) {
+            Text("Continue").padding(.vertical).padding(.horizontal,25)
+                .foregroundColor(.white)
+        }
+        .background(LinearGradient(gradient: .init(colors:[Color.red,Color.pink]), startPoint: .leading, endPoint: .trailing))
+        .clipShape(Capsule())
+        .disabled(self.selected != "" ? false : true)
     }
     func dismissView() {
         dismiss()

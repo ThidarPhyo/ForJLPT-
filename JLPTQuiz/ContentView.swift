@@ -22,12 +22,18 @@ struct ContentView: View {
                 NavigationLink(destination: Quiz1()) {
                     Text("START QUIZ")
                 }
+                NavigationLink(destination: Quiz2()) {
+                    Text("START Kanji QUIZ")
+                }
+                NavigationLink(destination: Quiz3()) {
+                    Text("START Kanji QUIZ with Image")
+                }
                 HStack{
                     //display your score
-                    Text("last score : \(self.score) / \(myQuiz1.count)")
-                        .onAppear(){ //refresh score
-                            self.score = LoadScore(quiz: "myQuiz1")
-                    }
+//                    Text("last score : \(self.score) / \(myQuiz1.count)")
+//                        .onAppear(){ //refresh score
+//                            self.score = LoadScore(quiz: "myQuiz1")
+//                    }
                 }
             }
             .navigationBarTitle("JLPT Quiz example",displayMode: .inline)
